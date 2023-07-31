@@ -120,9 +120,9 @@ function splitDsFs(dataArray) {
 }
 
 function getNumsAndRatios(dsAndFs) {
-  const numOfDs = dsAndFs.Ds.labels.length / 2;
+  const numOfDs = dsAndFs.Ds.labels.length;
   console.log("num of Ds: " + numOfDs);
-  const numOfFs = dsAndFs.Fs.labels.length / 2;
+  const numOfFs = dsAndFs.Fs.labels.length;
   console.log("num of Fs: " + numOfFs);
   const dRatio = (numOfDs * 100) / (numOfDs + numOfFs);
   const fRatio = (numOfFs * 100) / (numOfDs + numOfFs);
