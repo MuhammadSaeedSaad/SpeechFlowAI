@@ -11,13 +11,35 @@
 <body>
     <h1 class="header">SpeechFlowAI</h1>
 
+    <table>
+        <thead>
+            <tr>
+                <th>Info</th>
+                <th>Dysfluent</th>
+                <th>Fluent</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Number</td>
+                <td id="dNum">--</td>
+                <td id="fNum">--</td>
+            </tr>
+            <tr>
+                <td>Ratio</td>
+                <td id="dRatio">--</td>
+                <td id="fRatio">--</td>
+            </tr>
+        </tbody>
+    </table>
+
     <input type="file" id="csvFileInput" accept=".csv" class="styled-button">
 
     <div class="centered-div">
-        <div>
+        <div class="canvas-div">
             <canvas id="myChart"></canvas>
         </div>
-        <div>
+        <div class="canvas-div">
             <canvas id="myChart1"></canvas>
         </div>
     </div>
