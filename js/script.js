@@ -7,6 +7,8 @@ let dNumCell = document.getElementById("dNum");
 let fNumCell = document.getElementById("fNum");
 let dRatioCell = document.getElementById("dRatio");
 let fRatioCell = document.getElementById("fRatio");
+let dAvgTime = document.getElementById("dAvgTime");
+let fAvgTime = document.getElementById("fAvgTime");
 
 function handleFileSelect(event) {
   const file = event.target.files[0];
@@ -19,17 +21,14 @@ function handleFileSelect(event) {
       dataArray = parseCSV(contents);
       let dsAndFs = splitDsFs(dataArray);
 
-      console.log("hellos");
-      console.log(dsAndFs);
       // Do something with the dataArray (e.g., display it, manipulate it, etc.)
-      // console.log(dataArray);
       dataPlot = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: dsAndFs.Ds.data,
           datasets: [{
             label: 'Dysfluent',
-            data: dsAndFs.Ds.data,
+            data: dsAndFs.Ds.occuerance,
             borderWidth: 1,
             borderColor: "#3e95cd"
           }]
@@ -38,12 +37,21 @@ function handleFileSelect(event) {
           tension: 0.4,
           animation: {
             duration: 0
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: 'Frequency'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'syllable time ratio (s)'
+              }
+            }
           }
-          // scales: {
-          //     y: {
-          //     beginAtZero: true
-          //     }
-          // }
         }
       });
 
@@ -53,7 +61,7 @@ function handleFileSelect(event) {
           labels: dsAndFs.Fs.data,
           datasets: [{
             label: 'Fluent',
-            data: dsAndFs.Fs.data,
+            data: dsAndFs.Fs.occuerance,
             borderWidth: 1,
             borderColor: "#3e95cd"
           }]
@@ -62,20 +70,31 @@ function handleFileSelect(event) {
           tension: 0.4,
           animation: {
             duration: 0
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: 'Frequency'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'syllable time ratio (s)'
+              }
+            }
           }
-          // scales: {
-          //     y: {
-          //     beginAtZero: true
-          //     }
-          // }
         }
       });
 
       const numsAndRatios = getNumsAndRatios(dsAndFs);
       dNumCell.innerText = numsAndRatios.numOfDs;
       fNumCell.innerText = numsAndRatios.numOfFs;
-      dRatioCell.innerText = numsAndRatios.dRatio;
-      fRatioCell.innerText = numsAndRatios.fRatio;
+      dRatioCell.innerText = numsAndRatios.dRatio + " %";
+      fRatioCell.innerText = numsAndRatios.fRatio + " %";
+      dAvgTime.innerText = numsAndRatios.dAvgTime;
+      fAvgTime.innerText = numsAndRatios.fAvgTime;
 
     };
 
@@ -99,8 +118,8 @@ function parseCSV(csvData) {
 }
 
 function splitDsFs(dataArray) {
-  const Ds = { data: [], labels: [] };
-  const Fs = { data: [], labels: [] };
+  const Ds = { data: [], labels: [], occuerance: [] };
+  const Fs = { data: [], labels: [], occuerance: [] };
 
   for (let i = 0; i < dataArray.length; i += 2) {
     if (i !== dataArray.length - 1) {
@@ -118,19 +137,51 @@ function splitDsFs(dataArray) {
   }
   Ds.data.sort();
   Fs.data.sort();
+  // Ds.data.map((interval, key) => {
+  //   let occuerance = 1;
+  //   while (Ds.data[key + occuerance] === interval) {
+  //     occuerance++;
+  //   }
+  //   console.log("element: " + interval + " occurence: " + occuerance);
+  //   return [interval, occuerance];
+  // });
+  for (let i = 0; i < Ds.data.length; i++) {
+    let occuerance = 1;
+    let movingIndex = 1;
+    while (Ds.data[i + movingIndex] === Ds.data[i]) {
+      Ds.data.splice(i, 1);
+      occuerance++;
+    }
+    Ds.occuerance[i] = occuerance;
+  }
+
+
+  for (let i = 0; i < Fs.data.length; i++) {
+    let occuerance = 1;
+    let movingIndex = 1;
+    while (Fs.data[i + movingIndex] === Fs.data[i]) {
+      Fs.data.splice(i, 1);
+      occuerance++;
+    }
+    Fs.occuerance[i] = occuerance;
+    // Ds.data[i] = [Ds.data[i], occuerance];
+  }
   return { Ds, Fs }
 }
 
 function getNumsAndRatios(dsAndFs) {
   const numOfDs = dsAndFs.Ds.labels.length;
-  console.log("num of Ds: " + numOfDs);
   const numOfFs = dsAndFs.Fs.labels.length;
-  console.log("num of Fs: " + numOfFs);
   let dRatio = (numOfDs * 100) / (numOfDs + numOfFs);
   let fRatio = (numOfFs * 100) / (numOfDs + numOfFs);
   dRatio = Math.round(dRatio * 100) / 100
   fRatio = Math.floor(fRatio * 100) / 100;
 
-  return { numOfDs, numOfFs, dRatio, fRatio };
+  let dAvgTime = (dsAndFs.Ds.data[dsAndFs.Ds.data.length - 1] + dsAndFs.Ds.data[dsAndFs.Ds.data.length - 2] + dsAndFs.Ds.data[dsAndFs.Ds.data.length - 3]) / 3;
+  let fAvgTime = (dsAndFs.Fs.data[dsAndFs.Fs.data.length - 1] + dsAndFs.Fs.data[dsAndFs.Fs.data.length - 2] + dsAndFs.Fs.data[dsAndFs.Fs.data.length - 3]) / 3;
+
+  console.log("fAvgTime " + fAvgTime)
+
+  return { numOfDs, numOfFs, dRatio, fRatio, dAvgTime, fAvgTime };
 }
 
