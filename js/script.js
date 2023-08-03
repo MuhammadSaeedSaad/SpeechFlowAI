@@ -26,7 +26,7 @@ function handleFileSelect(event) {
       dataPlot = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: Array(dsAndFs.Ds.labels.length).fill(0).map((_, i) => i + 1),
+          labels: dsAndFs.Ds.data,
           datasets: [{
             label: 'Dysfluent',
             data: dsAndFs.Ds.data,
@@ -50,7 +50,7 @@ function handleFileSelect(event) {
       dataPlot1 = new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: Array(dsAndFs.Fs.labels.length).fill(0).map((_, i) => i + 1),
+          labels: dsAndFs.Fs.data,
           datasets: [{
             label: 'Fluent',
             data: dsAndFs.Fs.data,
@@ -105,17 +105,19 @@ function splitDsFs(dataArray) {
   for (let i = 0; i < dataArray.length; i += 2) {
     if (i !== dataArray.length - 1) {
       if (dataArray[i][1] == "D") {
-        Ds.data.push(dataArray[i + 1][0] - dataArray[i][0]);
+        //  Ds.data.push(dataArray[i + 1][0] - dataArray[i][0]);
+        Ds.data.push(Math.round((dataArray[i + 1][0] - dataArray[i][0]) * 100) / 100);
         Ds.labels.push(dataArray[i][1]);
       }
 
       if (dataArray[i][1] == "F") {
-        Fs.data.push(dataArray[i + 1][0] - dataArray[i][0]);
+        Fs.data.push(Math.round((dataArray[i + 1][0] - dataArray[i][0]) * 100) / 100);
         Fs.labels.push(dataArray[i][1]);
       }
     }
   }
-
+  Ds.data.sort();
+  Fs.data.sort();
   return { Ds, Fs }
 }
 
@@ -124,8 +126,10 @@ function getNumsAndRatios(dsAndFs) {
   console.log("num of Ds: " + numOfDs);
   const numOfFs = dsAndFs.Fs.labels.length;
   console.log("num of Fs: " + numOfFs);
-  const dRatio = (numOfDs * 100) / (numOfDs + numOfFs);
-  const fRatio = (numOfFs * 100) / (numOfDs + numOfFs);
+  let dRatio = (numOfDs * 100) / (numOfDs + numOfFs);
+  let fRatio = (numOfFs * 100) / (numOfDs + numOfFs);
+  dRatio = Math.round(dRatio * 100) / 100
+  fRatio = Math.floor(fRatio * 100) / 100;
 
   return { numOfDs, numOfFs, dRatio, fRatio };
 }
