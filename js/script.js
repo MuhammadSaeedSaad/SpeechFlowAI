@@ -9,6 +9,8 @@ let dRatioCell = document.getElementById("dRatio");
 let fRatioCell = document.getElementById("fRatio");
 let dAvgTime = document.getElementById("dAvgTime");
 let fAvgTime = document.getElementById("fAvgTime");
+let recodringLenth = document.getElementById("recordingLength");
+let sylMins = document.getElementById("sylMins");
 
 function handleFileSelect(event) {
   const file = event.target.files[0];
@@ -19,6 +21,9 @@ function handleFileSelect(event) {
     reader.onload = function (event) {
       const contents = event.target.result;
       dataArray = parseCSV(contents);
+      let recodringLength = dataArray[dataArray.length - 1][0] - dataArray[0][0];
+      let numberOfSylablesPerMinute = (dataArray.length / recodringLength) * 60;
+      numberOfSylablesPerMinute = Math.round(numberOfSylablesPerMinute * 100) / 100;
       let dsAndFs = splitDsFs(dataArray);
 
       // Do something with the dataArray (e.g., display it, manipulate it, etc.)
@@ -95,6 +100,8 @@ function handleFileSelect(event) {
       fRatioCell.innerText = numsAndRatios.fRatio + " %";
       dAvgTime.innerText = numsAndRatios.dAvgTime;
       fAvgTime.innerText = numsAndRatios.fAvgTime;
+      recodringLenth.innerText = recodringLength;
+      sylMins.innerText = numberOfSylablesPerMinute;
 
     };
 
@@ -179,6 +186,8 @@ function getNumsAndRatios(dsAndFs) {
 
   let dAvgTime = (dsAndFs.Ds.data[dsAndFs.Ds.data.length - 1] + dsAndFs.Ds.data[dsAndFs.Ds.data.length - 2] + dsAndFs.Ds.data[dsAndFs.Ds.data.length - 3]) / 3;
   let fAvgTime = (dsAndFs.Fs.data[dsAndFs.Fs.data.length - 1] + dsAndFs.Fs.data[dsAndFs.Fs.data.length - 2] + dsAndFs.Fs.data[dsAndFs.Fs.data.length - 3]) / 3;
+
+  // let recodringLenth = 
 
   console.log("fAvgTime " + fAvgTime)
 
