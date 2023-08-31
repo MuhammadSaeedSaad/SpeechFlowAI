@@ -3,14 +3,14 @@ body {
 }
 
 .header {
-    margin-bottom: 50px;
+    margin-bottom: 3vh;
 }
 
 .centered-div {
     margin: 0 auto;
     /* This will center the div horizontally */
-    width: 1500px;
-    height: 700px;
+    width: 40vw;
+    height: 60vh;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -18,9 +18,9 @@ body {
 }
 
 .canvas-div {
-    width: 1100px;
-    height: 620px;
-    margin: auto 30px;
+    width: 30vw;
+    height: 50vh;
+    margin: auto 3vw;
 }
 
 /* Style for the button */
@@ -51,8 +51,8 @@ body {
 }
 
 table {
-    width: 80%;
-    margin: 50px auto;
+    width: 30vw;
+    margin: 3vh auto;
     border-collapse: collapse;
     border: 2px solid #4CAF50;
     background-color: #f2f2f2;

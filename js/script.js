@@ -21,8 +21,9 @@ function handleFileSelect(event) {
     reader.onload = function (event) {
       const contents = event.target.result;
       dataArray = parseCSV(contents);
+      // console.log(dataArray)
       let recodringLength = dataArray[dataArray.length - 1][0] - dataArray[0][0];
-      let numberOfSylablesPerMinute = (dataArray.length / recodringLength) * 60;
+      let numberOfSylablesPerMinute = (dataArray.length / recodringLength) * 30;
       numberOfSylablesPerMinute = Math.round(numberOfSylablesPerMinute * 100) / 100;
       let dsAndFs = splitDsFs(dataArray);
 
@@ -98,10 +99,10 @@ function handleFileSelect(event) {
       fNumCell.innerText = numsAndRatios.numOfFs;
       dRatioCell.innerText = numsAndRatios.dRatio + " %";
       fRatioCell.innerText = numsAndRatios.fRatio + " %";
-      dAvgTime.innerText = numsAndRatios.dAvgTime;
-      fAvgTime.innerText = numsAndRatios.fAvgTime;
-      recodringLenth.innerText = recodringLength;
-      sylMins.innerText = numberOfSylablesPerMinute;
+      dAvgTime.innerText = Math.round(numsAndRatios.dAvgTime*100)/100;
+      fAvgTime.innerText = Math.round(numsAndRatios.fAvgTime*100)/100;
+      recodringLenth.innerText = Math.round(recodringLength*100)/100;
+      sylMins.innerText = Math.round(numberOfSylablesPerMinute*100)/100;
 
     };
 
