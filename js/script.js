@@ -1,6 +1,6 @@
 document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
 
-let dataPlot, dataPlot1, dataArray;
+let dataPlot, dataPlot1, dataArray, dsAndFs;
 const ctx = document.getElementById('myChart');
 const ctx1 = document.getElementById('myChart1');
 let dNumCell = document.getElementById("dNum");
@@ -11,6 +11,8 @@ let dAvgTime = document.getElementById("dAvgTime");
 let fAvgTime = document.getElementById("fAvgTime");
 let recodringLenth = document.getElementById("recordingLength");
 let sylMins = document.getElementById("sylMins");
+let fSylMins = document.getElementById("fSylMins");
+let dSylMin = document.getElementById("dSylMins");
 
 function handleFileSelect(event) {
   const file = event.target.files[0];
@@ -25,7 +27,9 @@ function handleFileSelect(event) {
       let recodringLength = dataArray[dataArray.length - 1][0] - dataArray[0][0];
       let numberOfSylablesPerMinute = (dataArray.length / recodringLength) * 30;
       numberOfSylablesPerMinute = Math.round(numberOfSylablesPerMinute * 100) / 100;
-      let dsAndFs = splitDsFs(dataArray);
+      dsAndFs = splitDsFs(dataArray);
+      let numberOfFSylablesPerMinute = ((dsAndFs.Fs.labels.length * 2)/ recodringLength) * 30;
+      let numberOfDSylablesPerMinute = ((dsAndFs.Ds.labels.length * 2)/ recodringLength) * 30;
 
       // Do something with the dataArray (e.g., display it, manipulate it, etc.)
       dataPlot = new Chart(ctx, {
@@ -103,7 +107,8 @@ function handleFileSelect(event) {
       fAvgTime.innerText = Math.round(numsAndRatios.fAvgTime*100)/100;
       recodringLenth.innerText = Math.round(recodringLength*100)/100;
       sylMins.innerText = Math.round(numberOfSylablesPerMinute*100)/100;
-
+      fSylMins.innerText = Math.round(numberOfFSylablesPerMinute*100)/100;
+      dSylMin.innerText = Math.round(numberOfDSylablesPerMinute*100)/100
     };
 
 
